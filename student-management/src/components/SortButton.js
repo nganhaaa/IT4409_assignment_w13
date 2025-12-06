@@ -1,14 +1,19 @@
+// ==================== COMPONENT: NÚT SẮP XẾP ====================
+// Component nút để chuyển đổi sắp xếp A-Z hoặc Z-A
+// CHỨC NĂNG: SẮP XẾP HỌC SINH
+
 import React from 'react';
 
 const SortButton = ({ sortAsc, onSortToggle }) => {
+  // ===== CONFIGURATION: Cấu hình màu sắc và icon cho 2 trạng thái =====
   const buttonConfig = {
-    ascending: {
+    ascending: {     // Sắp xếp A → Z (tăng dần)
       bg: '#6f42c1',
       hoverBg: '#5a32a3',
       icon: '⬆️',
       text: 'A → Z'
     },
-    descending: {
+    descending: {    // Sắp xếp Z → A (giảm dần)
       bg: '#fd7e14',
       hoverBg: '#e8590c',
       icon: '⬇️',
@@ -16,6 +21,7 @@ const SortButton = ({ sortAsc, onSortToggle }) => {
     }
   };
 
+  // Chọn cấu hình tương ứng với trạng thái hiện tại
   const config = sortAsc ? buttonConfig.ascending : buttonConfig.descending;
 
   const styles = {

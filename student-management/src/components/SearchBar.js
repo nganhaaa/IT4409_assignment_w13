@@ -1,3 +1,7 @@
+// ==================== COMPONENT: THANH TÌM KIẾM ====================
+// Component input để tìm kiếm học sinh theo tên hoặc lớp
+// CHỨC NĂNG: TÌM KIẾM HỌC SINH
+
 import React from 'react';
 
 const SearchBar = ({ searchTerm, onSearchChange }) => {

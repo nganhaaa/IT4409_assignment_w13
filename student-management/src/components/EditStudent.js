@@ -1,3 +1,7 @@
+// ==================== COMPONENT: CHỈNH SỬA HỌC SINH ====================
+// Component dùng để sửa thông tin học sinh đã tồn tại
+// CHỨC NĂNG: SỬA HỌC SINH
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -5,24 +9,29 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:5000/api/students';
 
 const EditStudent = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  // ===== HOOKS: Lấy tham số và điều hướng =====
+  const { id } = useParams();           // Lấy ID học sinh từ URL
+  const navigate = useNavigate();       // Hàm điều hướng về trang chủ
   
+  // ===== STATE MANAGEMENT: Quản lý trạng thái =====
   const [studentInfo, setStudentInfo] = useState({
     name: '',
     age: '',
     class: ''
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);           // Đang tải dữ liệu
+  const [errorMessage, setErrorMessage] = useState(null);     // Thông báo lỗi
+  const [isSubmitting, setIsSubmitting] = useState(false);    // Đang gửi form
 
+  // ==================== CHỨC NĂNG: XEM THÔNG TIN HỌC SINH ====================
+  // Hook: Tự động tải thông tin học sinh khi component được mount
   useEffect(() => {
     const fetchStudentDetails = async () => {
       try {
         setIsLoading(true);
         const response = await axios.get(`${API_BASE_URL}/${id}`);
         
+        // Lấy dữ liệu từ response (hỗ trợ 2 định dạng)
         const data = response.data.success ? response.data.data : response.data;
         setStudentInfo({
           name: data.name,
@@ -39,32 +48,40 @@ const EditStudent = () => {
     };
 
     fetchStudentDetails();
-  }, [id]);
+  }, [id]);  // Chạy lại khi ID thay đổi
 
+  // ==================== HANDLER FUNCTIONS ====================
+  
+  // HÀM: Cập nhật giá trị input khi người dùng nhập
   const handleInputUpdate = (field, value) => {
     setStudentInfo(prev => ({ ...prev, [field]: value }));
   };
 
+  // ==================== CHỨC NĂNG: SỬA HỌC SINH ====================
+  // HÀM: Xử lý khi submit form cập nhật
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitting(true);
+    setIsSubmitting(true);  // Bật trạng thái đang gửi
 
     try {
+      // Gửi request PUT để cập nhật thông tin học sinh
       await axios.put(`${API_BASE_URL}/${id}`, {
         name: studentInfo.name.trim(),
         age: parseInt(studentInfo.age),
         class: studentInfo.class.trim()
       });
 
+      // Chuyển về trang chủ kèm thông báo thành công
       navigate('/', { state: { message: 'Cập nhật thành công!' } });
     } catch (err) {
       console.error('Update error:', err);
       alert('Không thể cập nhật thông tin. Vui lòng thử lại!');
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false);  // Tắt trạng thái đang gửi
     }
   };
 
+  // HÀM: Quay về trang chủ
   const goBack = () => navigate('/');
 
   const pageStyles = {

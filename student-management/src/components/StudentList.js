@@ -1,19 +1,32 @@
+// ==================== COMPONENT: DANH SÁCH HỌC SINH ====================
+// Component hiển thị bảng danh sách học sinh
+// Có nút SỬA và XÓA cho mỗi học sinh
+
 import { useNavigate } from 'react-router-dom';
 
 const StudentList = ({ students, loading, error, onDelete }) => {
+  // ===== HOOK: Điều hướng giữa các trang =====
   const navigate = useNavigate();
 
+  // ==================== HANDLER FUNCTIONS ====================
+  
+  // HÀM: Chuyển đến trang chỉnh sửa học sinh
+  // CHỨC NĂNG: SỬA HỌC SINH
   const navigateToEdit = (id) => {
-    navigate(`/edit/${id}`);
+    navigate(`/edit/${id}`);  // Chuyển đến /edit/:id
   };
 
+  // HÀM: Xác nhận và xóa học sinh
+  // CHỨC NĂNG: XÓA HỌC SINH
   const confirmAndDelete = (id, name) => {
+    // Hiển thị hộp thoại xác nhận
     const confirmed = window.confirm(`Xác nhận xóa học sinh: ${name}?`);
     if (confirmed) {
-      onDelete(id);
+      onDelete(id);  // Gọi callback để xóa học sinh
     }
   };
 
+  // ===== INLINE STYLES: Định dạng giao diện bảng =====
   const tableStyles = {
     container: {
       backgroundColor: '#ffffff',
@@ -46,7 +59,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
       padding: '12px 15px',
       borderBottom: '1px solid #e0e0e0'
     },
-    editBtn: {
+    editBtn: {  // NÚT SỬA (màu xanh dương)
       padding: '6px 12px',
       backgroundColor: '#007bff',
       color: 'white',
@@ -56,7 +69,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
       marginRight: '8px',
       fontSize: '14px'
     },
-    deleteBtn: {
+    deleteBtn: {  // NÚT XÓA (màu đỏ)
       padding: '6px 12px',
       backgroundColor: '#dc3545',
       color: 'white',
@@ -67,6 +80,9 @@ const StudentList = ({ students, loading, error, onDelete }) => {
     }
   };
 
+  // ==================== RENDER: Giao diện hiển thị ====================
+  
+  // TRẠNG THÁI: Đang tải dữ liệu
   if (loading) {
     return (
       <div style={tableStyles.container}>
@@ -77,6 +93,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
     );
   }
 
+  // TRẠNG THÁI: Có lỗi xảy ra
   if (error) {
     return (
       <div style={tableStyles.container}>
@@ -87,6 +104,8 @@ const StudentList = ({ students, loading, error, onDelete }) => {
     );
   }
 
+  // TRẠNG THÁI: Hiển thị bình thường
+  // CHỨC NĂNG: XEM DANH SÁCH HỌC SINH
   return (
     <div style={tableStyles.container}>
       <h2 style={tableStyles.title}>📋 Danh Sách Học Sinh</h2>
@@ -109,6 +128,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
             </tr>
           </thead>
           <tbody>
+            {/* Lặp qua từng học sinh và hiển thị thông tin */}
             {students.map((student, idx) => (
               <tr key={student._id} style={{ backgroundColor: idx % 2 === 0 ? '#fff' : '#f8f9fa' }}>
                 <td style={{ ...tableStyles.td, textAlign: 'center' }}>{idx + 1}</td>
@@ -116,6 +136,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
                 <td style={{ ...tableStyles.td, textAlign: 'center' }}>{student.age}</td>
                 <td style={tableStyles.td}>{student.class}</td>
                 <td style={{ ...tableStyles.td, textAlign: 'center' }}>
+                  {/* NÚT SỬA - CHỨC NĂNG: SỬA HỌC SINH */}
                   <button
                     onClick={() => navigateToEdit(student._id)}
                     style={tableStyles.editBtn}
@@ -125,6 +146,7 @@ const StudentList = ({ students, loading, error, onDelete }) => {
                     ✏️ Sửa
                   </button>
                   
+                  {/* NÚT XÓA - CHỨC NĂNG: XÓA HỌC SINH */}
                   <button
                     onClick={() => confirmAndDelete(student._id, student.name)}
                     style={tableStyles.deleteBtn}
